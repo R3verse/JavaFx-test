@@ -8,13 +8,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
+
 
 public class Main extends Application {
 
     Stage window;
+    Scene scene1, scene2;
     TableView<Product> table;
     TextField nameInput, priceInput, quantityInput;
 
@@ -27,7 +32,65 @@ public class Main extends Application {
         window = primaryStage;
         window.setTitle("Product store - Max Jensen");
 
-       TableColumn<Product, String> nameColumn = new TableColumn<>("Name");
+       setScene1();
+
+
+        window.show();
+    }
+
+    public void setScene1()
+    {
+        window.setTitle("Login");
+
+        //GridPane with 10px padding around edge
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setVgap(8);
+        grid.setHgap(10);
+
+        //Name Label - constrains use (child, column, row)
+        Label nameLabel = new Label("Username:");
+        nameLabel.setId("bold-label");
+        GridPane.setConstraints(nameLabel, 0, 0);
+
+        //Name Input
+        TextField nameInput = new TextField("maxjensendk");
+        GridPane.setConstraints(nameInput, 1, 0);
+
+        //Password Label
+        Label passLabel = new Label("Password:");
+        GridPane.setConstraints(passLabel, 0, 1);
+
+        //Password Input
+        TextField passInput = new TextField();
+        passInput.setPromptText("password");
+        GridPane.setConstraints(passInput, 1, 1);
+
+        //Login
+        Button loginButton = new Button("Log In");
+        loginButton.setOnAction(e -> setScene2());
+        GridPane.setConstraints(loginButton, 1, 2);
+
+        //Sign up
+        Button signUpButton = new Button("Sign Up");
+        signUpButton.getStyleClass().add("button-blue");
+        GridPane.setConstraints(signUpButton, 1, 3);
+
+        //Add everything to grid
+        grid.getChildren().addAll(nameLabel, nameInput, passLabel, passInput, loginButton, signUpButton);
+
+        Scene scene = new Scene(grid, 300, 200);
+        window.setScene(scene);
+        window.show();
+
+
+    }
+
+    public Scene setScene2()
+    {
+        window.setTitle("Database content");
+
+        TableColumn<Product, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setMinWidth(200);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -55,11 +118,13 @@ public class Main extends Application {
         addButton.setOnAction(e -> addButtonClicked());
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(e -> deleteButtonClicked());
+        Button backButton = new Button("Go Back");
+        backButton.setOnAction(e -> setScene1());
 
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10, 10, 10, 10));
         hbox.setSpacing(10);
-        hbox.getChildren().addAll(nameInput, priceInput, quantityInput, addButton, deleteButton);
+        hbox.getChildren().addAll(nameInput, priceInput, quantityInput, addButton, deleteButton, backButton);
 
 
         table = new TableView<>();
@@ -70,9 +135,9 @@ public class Main extends Application {
         VBox vbox = new VBox();
         vbox.getChildren().addAll(table, hbox);
 
-        Scene scene = new Scene(vbox);
-        window.setScene(scene);
-        window.show();
+       scene2 = new Scene(vbox);
+        window.setScene(scene2);
+        return scene2;
     }
 
     // adds to table
