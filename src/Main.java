@@ -27,7 +27,10 @@ public class Main extends Application {
         window.setTitle("thenewboston");
         button = new Button("Click Me");
 
-        button.setOnAction(e -> AlertBox.display("Title of Window", "Wow this alert box is awesome!"));
+        button.setOnAction(e -> {
+            boolean result = ConfirmBox.display("Title of window", "Are you sure?!");
+            System.out.println(result);
+        });
 
         StackPane layout = new StackPane();
         layout.getChildren().add(button);
@@ -35,7 +38,5 @@ public class Main extends Application {
         window.setScene(scene);
         window.show();
 
-
-        // layout 1 - vertical column
     }
 }
