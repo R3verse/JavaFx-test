@@ -13,8 +13,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private Stage window;
-    private Scene scene1;
-    private Scene scene2;
+    private Button button;
+
 
     public static void main(String[] args) {
 
@@ -24,26 +24,18 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
+        window.setTitle("thenewboston");
+        button = new Button("Click Me");
 
-        Label label1 = new Label("Welcome to first scene");
-        Button btn1 = new Button("Go to scene 2");
-        btn1.setOnAction(e -> window.setScene(scene2));
+        button.setOnAction(e -> AlertBox.display("Title of Window", "Wow this alert box is awesome!"));
+
+        StackPane layout = new StackPane();
+        layout.getChildren().add(button);
+        Scene scene = new Scene(layout, 300, 250);
+        window.setScene(scene);
+        window.show();
+
 
         // layout 1 - vertical column
-        VBox layout1 = new VBox(20);
-        layout1.getChildren().addAll(label1, btn1);
-        scene1 = new Scene(layout1, 350, 500);
-
-        Button btn2 = new Button("GO back to scene 1");
-        btn2.setOnAction(e -> window.setScene(scene1));
-
-        StackPane layout2 = new StackPane();
-        layout2.getChildren().add(btn2);
-        scene2 = new Scene(layout2, 600, 300);
-
-        window.setScene(scene1);
-        window.setTitle("Title of scene");
-        window.show();
     }
-
 }
