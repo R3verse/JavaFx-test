@@ -1,19 +1,17 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
 
 
 public class Main extends Application {
@@ -48,23 +46,29 @@ public class Main extends Application {
         grid.setVgap(8);
         grid.setHgap(10);
 
-        //Name Label - constrains use (child, column, row)
         Label nameLabel = new Label("Username:");
         nameLabel.setId("bold-label");
         GridPane.setConstraints(nameLabel, 0, 0);
 
-        //Name Input
-        TextField nameInput = new TextField("maxjensendk");
+        TextField nameInput = new TextField("");
+        nameInput.setPromptText("Username..");
         GridPane.setConstraints(nameInput, 1, 0);
 
-        //Password Label
+
         Label passLabel = new Label("Password:");
         GridPane.setConstraints(passLabel, 0, 1);
 
-        //Password Input
-        TextField passInput = new TextField();
-        passInput.setPromptText("password");
-        GridPane.setConstraints(passInput, 1, 1);
+        PasswordField passinput = new PasswordField();
+        passinput.setPromptText("Password..");
+
+        passinput.setOnKeyPressed(e -> {
+            KeyCode key = e.getCode();
+            if (key == KeyCode.ENTER){
+               setScene2();
+            }
+        });
+
+        GridPane.setConstraints(passinput, 1, 1);
 
         //Login
         Button loginButton = new Button("Log In");
@@ -77,7 +81,7 @@ public class Main extends Application {
         GridPane.setConstraints(signUpButton, 1, 3);
 
         //Add everything to grid
-        grid.getChildren().addAll(nameLabel, nameInput, passLabel, passInput, loginButton, signUpButton);
+        grid.getChildren().addAll(nameLabel, nameInput, passLabel, passinput, loginButton, signUpButton);
 
         Scene scene = new Scene(grid, 300, 200);
         window.setScene(scene);
