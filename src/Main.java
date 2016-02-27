@@ -1,7 +1,6 @@
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,17 +8,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
 public class Main extends Application {
 
-    Stage window;
-    Scene scene1, scene2;
-    TableView<Product> table;
-    TextField nameInput, priceInput, quantityInput;
+    public Stage window;
+    private Scene scene1, scene2;
+    private TableView<Product> table;
+    private TextField nameInput, priceInput, quantityInput;
+    private PasswordField passwordField;
 
     public static void main(String[] args) {
         launch(args);
@@ -50,7 +49,7 @@ public class Main extends Application {
         nameLabel.setId("bold-label");
         GridPane.setConstraints(nameLabel, 0, 0);
 
-        TextField nameInput = new TextField("");
+        nameInput = new TextField("");
         nameInput.setPromptText("Username..");
         GridPane.setConstraints(nameInput, 1, 0);
 
@@ -58,21 +57,24 @@ public class Main extends Application {
         Label passLabel = new Label("Password:");
         GridPane.setConstraints(passLabel, 0, 1);
 
-        PasswordField passinput = new PasswordField();
-        passinput.setPromptText("Password..");
+        passwordField = new PasswordField();
+        passwordField.setPromptText("Password..");
 
-        passinput.setOnKeyPressed(e -> {
+        passwordField.setOnKeyPressed(e -> {
             KeyCode key = e.getCode();
-            if (key == KeyCode.ENTER){
-               setScene2();
+            if (key == KeyCode.ENTER)
+            {
+                validateUser();
             }
         });
 
-        GridPane.setConstraints(passinput, 1, 1);
+        GridPane.setConstraints(passwordField, 1, 1);
 
         //Login
         Button loginButton = new Button("Log In");
-        loginButton.setOnAction(e -> setScene2());
+        loginButton.setOnAction(e -> {
+            validateUser();
+        });
         GridPane.setConstraints(loginButton, 1, 2);
 
         //Sign up
@@ -80,8 +82,9 @@ public class Main extends Application {
         signUpButton.getStyleClass().add("button-blue");
         GridPane.setConstraints(signUpButton, 1, 3);
 
+
         //Add everything to grid
-        grid.getChildren().addAll(nameLabel, nameInput, passLabel, passinput, loginButton, signUpButton);
+        grid.getChildren().addAll(nameLabel, nameInput, passLabel, passwordField, loginButton, signUpButton);
 
         Scene scene = new Scene(grid, 300, 200);
         window.setScene(scene);
@@ -92,8 +95,8 @@ public class Main extends Application {
 
     public Scene setScene2()
     {
-        window.setTitle("Database content");
 
+        window.setTitle("Product Store - Max Jensen");
         TableColumn<Product, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setMinWidth(200);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -135,13 +138,29 @@ public class Main extends Application {
         table.setItems(getProduct());
         table.getColumns().addAll(nameColumn, priceColumn, quantityColumn);
 
-
         VBox vbox = new VBox();
         vbox.getChildren().addAll(table, hbox);
 
        scene2 = new Scene(vbox);
         window.setScene(scene2);
         return scene2;
+    }
+
+    public void validateUser()
+    {
+
+        if (nameInput.getText().equals("Maxjensendk") && passwordField.getText().equals("1P@SSW0RD!") ) {
+
+            setScene2();
+
+        }else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("ERROR");
+            alert.setHeaderText(null);
+            alert.setContentText("Invalid password/username combination");
+            alert.show();
+        }
+
     }
 
     // adds to table
@@ -155,7 +174,6 @@ public class Main extends Application {
         nameInput.clear();
         priceInput.clear();
         quantityInput.clear();
-
     }
 
     public void deleteButtonClicked()
